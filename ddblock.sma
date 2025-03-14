@@ -3,11 +3,10 @@
 #include <reapi>
 
 public plugin_init() {
-    register_plugin("DoubleDuck Block", "1.3", "kreedzru", "github.com/kreedzru");
+    register_plugin("DoubleDuck Block", "1.4", "kreedzru", "github.com/kreedzru");
     RegisterHookChain(RG_PM_Move, "PM_Move_Post", true);
 
     register_cvar("ddblock_enable", "1"); 
-    register_cvar("ddblock_speed", "1");
 
     LoadConfig();
 }
@@ -21,7 +20,7 @@ public PM_Move_Post(pPlayer) {
         return;
     }
 
-    if (get_pmove(pm_bInDuck) && get_pcvar_num(get_cvar_pointer("ddblock_speed"))) {
+    if (get_pmove(pm_bInDuck)) {
         new Float:fVelocity[3];
         get_pmove(pm_velocity, fVelocity);
         fVelocity[0] = fVelocity[1] = 0.0;
@@ -37,19 +36,16 @@ public LoadConfig() {
 
     if (!file_exists(configFile)) {
         write_file(configFile, "; DoubleDuck Block Configuration File");
-        write_file(configFile, "; Version: 1.3");
+        write_file(configFile, "; Version: 1.4");
         write_file(configFile, "; Author: Kreedzru");
         write_file(configFile, "; GitHub: github.com/kreedzru");
         write_file(configFile, "");
         write_file(configFile, "; Включение/выключение плагина (1 - включено, 0 - выключено)");
-        write_file(configFile, "ddblock_enable 0");
-        write_file(configFile, "");
-        write_file(configFile, "; Блокировка скорости при приседании (1 - включено, 0 - выключено)");
-        write_file(configFile, "ddblock_speed 1");
+        write_file(configFile, "ddblock_enable 1");
 
         log_to_file("ddblock.log", "[DDBlock] Конфигурационный файл создан: %s", configFile);
     } 
-	else {
+    else {
         log_to_file("ddblock.log", "[DDBlock] Конфигурационный файл уже существует: %s", configFile);
     }
 
@@ -77,12 +73,9 @@ public LoadCVarsFromFile(const fileName[]) {
         if (equal(key, "ddblock_enable")) {
             set_cvar_num("ddblock_enable", str_to_num(value));
             //log_to_file("ddblock.log", "[DDBlock] Загружено значение: ddblock_enable=%d", str_to_num(value));
-        } else if (equal(key, "ddblock_speed")) {
-            set_cvar_num("ddblock_speed", str_to_num(value));
-            //log_to_file("ddblock.log", "[DDBlock] Загружено значение: ddblock_speed=%d", str_to_num(value));
         }
     }
 
     fclose(file);
-    log_to_file("ddblock.log", "[DDBlock] Значения CVARов загружены из файла: %s", fileName);
+    log_to_file("ddblock.log", "[DDBlock] Значения кваров загружены из файла: %s", fileName);
 }
