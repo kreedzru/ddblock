@@ -3,7 +3,7 @@
 #include <reapi>
 
 public plugin_init() {
-    register_plugin("DoubleDuck Block", "1.4", "kreedzru", "github.com/kreedzru");
+    register_plugin("DoubleDuck Block", "1.4", "kreedzru");
     RegisterHookChain(RG_PM_Move, "PM_Move_Post", true);
 
     register_cvar("ddblock_enable", "1"); 
